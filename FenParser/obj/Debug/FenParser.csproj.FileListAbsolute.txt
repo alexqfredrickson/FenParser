@@ -1,0 +1,5 @@
+c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\bin\Debug\FenParser.dll
+c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\bin\Debug\FenParser.pdb
+c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\obj\Debug\FenParser.csprojResolveAssemblyReference.cache
+c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\obj\Debug\FenParser.dll
+c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\obj\Debug\FenParser.pdb
