@@ -16,6 +16,7 @@
     * The game's halfmove counter
     * The game's turn number
 
+
     ```csharp
     bool castlingAvailability = parser.BoardStateData.WhiteCanQueensideCastle; // false
     ```
