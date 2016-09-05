@@ -39,9 +39,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BoardState.cs" />
+    <Compile Include="Constants\ActivePlayerColor.cs" />
+    <Compile Include="Models\BoardStateData.cs" />
     <Compile Include="FenParser.cs" />
-    <Compile Include="FenString.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

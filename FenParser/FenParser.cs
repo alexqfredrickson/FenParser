@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FenParser.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,175 +12,75 @@ namespace FenParser
     /// </summary>
     public class FenParser
     {
-        public FenString FenString { get; set; }
+        #region Fields
 
         /// <summary>
-        /// Parses a FEN string and returns data related to the board state.
+        /// The unparsed FEN string.
         /// </summary>
-        /// <returns>Returns board state metadata.</returns>
-        public BoardState Parse()
+        private string FEN { get; set; }
+
+        /// <summary>
+        /// A FEN substring representing the position of the white and black pieces on the board.
+        /// </summary>
+        private string PiecePlacementString { get; set; }
+
+        /// <summary>
+        /// A FEN substring representing the active player.
+        /// </summary>
+        private string ActiveColorString { get; set; }
+
+        /// <summary>
+        /// A FEN substring representing the availability of castling for each player.
+        /// </summary>
+        private string CastlingAvailabilityString { get; set; }
+
+        /// <summary>
+        /// A FEN substring representing the square which is currently available for "en passant" capture ('-' if a square is not available).  
+        /// </summary>
+        private string EnPassantSquareString { get; set; }
+
+        /// <summary>
+        /// A FEN substring representing the number of half moves since the last pawn advance or piece capture (used to determine stalemate).
+        /// </summary>
+        private string HalfmoveClockString { get; set; }
+
+        /// <summary>
+        /// A FEN substring representing the game turn (incremented after Black moves).
+        /// </summary>
+        private string FullmoveNumberString { get; set; }
+
+        public BoardStateData BoardStateData { get; set; }
+
+        #endregion
+
+        #region Methods
+
+        public void ParseFenSubstrings(string[] fenSubstrings)
         {
-            BoardState board = new BoardState();
-
-            board.Ranks = this.GetPiecePlacement(this.FenString.PiecePlacement);
-            board.ActivePlayer = this.GetActiveColor(this.FenString.ActiveColor);
-            board.WhiteCanKingsideCastle = this.GetWhiteQueensideCastlingAvailability(this.FenString.CastlingAvailability);
-            board.WhiteCanQueensideCastle = this.GetWhiteQueensideCastlingAvailability(this.FenString.CastlingAvailability);
-            board.BlackCanKingsideCastle = this.GetBlackKingsideCastlingAvailability(this.FenString.CastlingAvailability);
-            board.BlackCanQueensideCastle = this.GetBlackQueensideCastlingAvailability(this.FenString.CastlingAvailability);
-
-            board.EnPassantSquare = this.GetEnPassantSquare(this.FenString.EnPassantSquare);
-            board.HalfMoveCounter = this.GetHalfmoveClock(this.FenString.HalfmoveClock);
-            board.FullMoveNumber = this.GetFullmoveNumber(this.FenString.FullmoveNumber);
-
-            return board;
+            PiecePlacementString = fenSubstrings[0];
+            ActiveColorString = fenSubstrings[1];
+            CastlingAvailabilityString = fenSubstrings[2];
+            EnPassantSquareString = fenSubstrings[3];
+            HalfmoveClockString = fenSubstrings[4];
+            FullmoveNumberString = fenSubstrings[5];
         }
 
-        public List<string[]> GetPiecePlacement(string fenSubstring)
-        {
-            List<string[]> ranks = new List<string[]>();
+        #endregion
 
-            string[] fenRanks = fenSubstring.Split('/');
-
-            for (int i = 0; i < 8; i++)
-            {
-                string[] fenRank = Array.ConvertAll(fenRanks[i].ToCharArray(), x => x.ToString());
-                List<string> newRank = new List<string>();
-
-                for (int j = 0; j < fenRank.Length; j++)
-                {
-                    string currentFenSquare = fenRank[j];
-
-                    int n;
-                    if (int.TryParse(currentFenSquare, out n))
-                    {
-                        int fenNullSquares = int.Parse(currentFenSquare);
-
-                        for (int k = 0; k < fenNullSquares; k++)
-                        {
-                            newRank.Add(" ");
-                        }
-                    }
-                    else
-                    {
-                        newRank.Add(currentFenSquare);
-                    }
-                }
-
-                ranks.Add(newRank.ToArray<string>());
-            }
-
-            return ranks;
-        }
-
-        public string GetActiveColor(string fenSubstring)
-        {
-            if (fenSubstring.ToLower().Equals("b"))
-            {
-                return "Black";
-            }
-            else if (fenSubstring.ToLower().Equals("w"))
-            {
-                return "White";
-            }
-
-            return String.Empty;
-        }
-
-        public bool GetWhiteKingsideCastlingAvailability(string fenSubstring)
-        {
-            if (fenSubstring.Contains("K"))
-            {
-                return true;
-            }
-            else if (fenSubstring.Contains("-"))
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        public bool GetWhiteQueensideCastlingAvailability(string fenSubstring)
-        {
-            if (fenSubstring.Contains("Q"))
-            {
-                return true;
-            }
-            else if (fenSubstring.Contains("-"))
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        public bool GetBlackKingsideCastlingAvailability(string fenSubstring)
-        {
-            if (fenSubstring.Contains("k"))
-            {
-                return true;
-            }
-            else if (fenSubstring.Contains("-"))
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        public bool GetBlackQueensideCastlingAvailability(string fenSubstring)
-        {
-            if (fenSubstring.Contains("q"))
-            {
-                return true;
-            }
-            else if (fenSubstring.Contains("-"))
-            {
-                return false;
-            }
-
-            return false;
-        }
-
-        public string GetEnPassantSquare(string fenSubstring)
-        {
-            if (fenSubstring.Contains("-"))
-            {
-                return String.Empty;
-            }
-            else if (!String.IsNullOrEmpty(fenSubstring))
-            {
-                return fenSubstring;
-            }
-
-            return String.Empty;
-        }
-
-        public int? GetHalfmoveClock(string fenSubstring)
-        {
-            int n;
-            return int.TryParse(fenSubstring, out n) ? int.Parse(fenSubstring) : (int?)null;
-        }
-
-        public int? GetFullmoveNumber(string fenSubstring)
-        {
-            int n;
-            return int.TryParse(fenSubstring, out n) ? int.Parse(fenSubstring) : (int?)null;
-        }
-
+        #region Constructors
         public FenParser()
         {
-            FenString = new FenString();
+            BoardStateData board = new BoardStateData();
         }
 
-        /// <summary>
-        /// Loads a FenParser object with a FEN string.
-        /// </summary>
-        public FenParser(FenString fen)
+        public FenParser(string fen)
         {
-            FenString = fen;
-        }
-    }
+            FEN = fen;
+            ParseFenSubstrings(FEN.Split(' '));
 
+            BoardStateData board = new BoardStateData(PiecePlacementString, ActiveColorString, CastlingAvailabilityString,
+                EnPassantSquareString, HalfmoveClockString, FullmoveNumberString);
+        }
+        #endregion
+    }
 }

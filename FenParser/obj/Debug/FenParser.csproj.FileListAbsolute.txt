@@ -3,3 +3,7 @@ c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\
 c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\obj\Debug\FenParser.csprojResolveAssemblyReference.cache
 c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\obj\Debug\FenParser.dll
 c:\users\afredrickson\documents\visual studio 2013\Projects\FenParser\FenParser\obj\Debug\FenParser.pdb
+C:\Users\Pompous\Documents\GitHub\FenParser\FenParser\obj\Debug\FenParser.dll
+C:\Users\Pompous\Documents\GitHub\FenParser\FenParser\bin\Debug\FenParser.dll
+C:\Users\Pompous\Documents\GitHub\FenParser\FenParser\bin\Debug\FenParser.pdb
+C:\Users\Pompous\Documents\GitHub\FenParser\FenParser\obj\Debug\FenParser.pdb
