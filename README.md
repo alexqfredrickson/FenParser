@@ -5,9 +5,10 @@
 
 1. Construct a FenParser object and feed it a FEN string.
 
-    ```csharp
-    FenParser parser = new FenParser("5k2/ppp5/4P3/3R3p/6P1/1K2Nr2/PP3P2/8 b - - 1 32");
-    ```
+```csharp
+FenParser parser = new FenParser("5k2/ppp5/4P3/3R3p/6P1/1K2Nr2/PP3P2/8 b - - 1 32");
+```
+
 2. FenParser's BoardStateData field now exposes all of the necessary metadata used to describe the game's state, including:
     * The active player color
     * The en-passant square (if eligible)
@@ -16,10 +17,9 @@
     * The game's halfmove counter
     * The game's turn number
 
-
-    ```csharp
-    bool castlingAvailability = parser.BoardStateData.WhiteCanQueensideCastle; // false
-    ```
+```csharp
+bool castlingAvailability = parser.BoardStateData.WhiteCanQueensideCastle; // false
+```
     
 Additionally, the `BoardStateData.ToConsole()` method returns a command-line visualization of the board state. 
 
