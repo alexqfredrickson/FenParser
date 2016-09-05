@@ -4,6 +4,7 @@
 ### Basic usage
 
 1. Construct a FenParser object and feed it a FEN string.
+
     ```csharp
     FenParser parser = new FenParser("5k2/ppp5/4P3/3R3p/6P1/1K2Nr2/PP3P2/8 b - - 1 32");
     ```
