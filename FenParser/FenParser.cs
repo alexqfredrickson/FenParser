@@ -70,7 +70,7 @@ namespace FenParser
         #region Constructors
         public FenParser()
         {
-            BoardStateData board = new BoardStateData();
+            BoardStateData = new BoardStateData();
         }
 
         public FenParser(string fen)
@@ -78,7 +78,7 @@ namespace FenParser
             FEN = fen;
             ParseFenSubstrings(FEN.Split(' '));
 
-            BoardStateData board = new BoardStateData(PiecePlacementString, ActiveColorString, CastlingAvailabilityString,
+            BoardStateData = new BoardStateData(PiecePlacementString, ActiveColorString, CastlingAvailabilityString,
                 EnPassantSquareString, HalfmoveClockString, FullmoveNumberString);
         }
         #endregion

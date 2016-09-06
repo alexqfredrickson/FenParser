@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace FenParser.Models
@@ -25,7 +26,7 @@ namespace FenParser.Models
         /// <summary>
         /// A list of ranks (reversed; from rank #8 to rank #1)
         /// </summary>
-        public List<string[]> Ranks { get; set; }
+        public string[][] Ranks = new string[8][];
 
         /// <summary>
         /// White's kingside castling availability.
@@ -67,35 +68,71 @@ namespace FenParser.Models
         /// <returns></returns>
         private void ParseRanks(string piecePlacementString)
         {
-            string[] fenRanks = piecePlacementString.Split('/');
+            string[] piecePlacementRanksArray = piecePlacementString.Split('/');
 
-            for (int i = 0; i < 8; i++)
+            for (int i = 0; i < piecePlacementRanksArray.Length; i++) 
             {
-                string[] fenRank = Array.ConvertAll(fenRanks[i].ToCharArray(), x => x.ToString());
-                List<string> newRank = new List<string>();
+                piecePlacementRanksArray[i] = SanitizeRank(piecePlacementRanksArray[i]);
+            }
 
-                for (int j = 0; j < fenRank.Length; j++)
+            for (int i = 0; i < piecePlacementRanksArray.Length; i++)
+            {
+                string[] allRanks = Array.ConvertAll(piecePlacementRanksArray[i].ToCharArray(), x => x.ToString());
+                string[] newRank = new string[8];
+
+                for (int j = 0; j < allRanks.Length; j++)
                 {
-                    string currentFenSquare = fenRank[j];
+                    string thisSquare = allRanks[j];
 
                     int n;
-                    if (int.TryParse(currentFenSquare, out n))
+                    if (int.TryParse(thisSquare, out n))
                     {
-                        int fenNullSquares = int.Parse(currentFenSquare);
+                        int nullSquareCount = int.Parse(thisSquare);
 
-                        for (int k = 0; k < fenNullSquares; k++)
+                        for (int k = 0; k < nullSquareCount; k++)
                         {
-                            newRank.Add(" ");
+                            newRank[j] = String.Empty;
                         }
                     }
                     else
                     {
-                        newRank.Add(currentFenSquare);
+                        newRank[j] = thisSquare;
                     }
                 }
 
-                Ranks.Add(newRank.ToArray<string>());
+                Ranks[i] = newRank;
             }
+        }
+
+        /// <summary>
+        /// Sanitizes a rank string by replacing instances of integers with same-length blank substrings.
+        /// </summary>
+        /// <returns></returns>
+        private string SanitizeRank(string rank)
+        {
+            Regex r = new Regex(@"[\d]+");
+            Match m = r.Match(rank);
+
+            while (m.Success)
+            {
+                StringBuilder sb = new StringBuilder(rank);
+
+                int index = m.Index;
+                int nullSquareCount = int.Parse(m.Value);
+                string newSubstring = String.Empty;
+
+                for (int j = 0; j < nullSquareCount; j++)
+                {
+                    newSubstring += " ";
+                }
+
+                sb.Remove(index, 1);
+                sb.Insert(index, newSubstring);
+                rank = sb.ToString();
+                m = r.Match(rank);
+            }
+
+            return rank;
         }
 
         /// <summary>
@@ -197,7 +234,7 @@ namespace FenParser.Models
 
             for (int i = 0; i < 8; i++)
             {
-                string[] currentRank = this.Ranks.ElementAt(i);
+                string[] currentRank = Ranks[i];
 
                 Console.WriteLine(
                       "|" + currentRank[0] + "|" + currentRank[1] + "|" + currentRank[2] + "|" + currentRank[3]
@@ -292,8 +329,6 @@ namespace FenParser.Models
         public BoardStateData(string piecePlacementString, string activeColorString, string castlingAvailabilityString,
                 string enPassantSquareString, string halfmoveClockString, string fullmoveNumberString)
         {
-            Ranks = new List<string[]>();
-
             ParseRanks(piecePlacementString);
             ParseActiveColor(activeColorString);
             ParseCastlingAvailability(castlingAvailabilityString);
