@@ -70,7 +70,7 @@ namespace FenParser.Models
         {
             string[] piecePlacementRanksArray = piecePlacementString.Split('/');
 
-            for (int i = 0; i < piecePlacementRanksArray.Length; i++) 
+            for (int i = 0; i < piecePlacementRanksArray.Length; i++)
             {
                 piecePlacementRanksArray[i] = SanitizeRank(piecePlacementRanksArray[i]);
             }
