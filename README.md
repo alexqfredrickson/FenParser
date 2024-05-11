@@ -1,9 +1,9 @@
 # FenParser
-<b>FenParser</b> is a simple C# library for use in parsing [Forsyth-Edwards notated records](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
+<b>FenParser</b> is a C# class library for .NET 8.0 that parses [Forsyth-Edwards notated records](https://en.wikipedia.org/wiki/Forsyth%E2%80%93Edwards_Notation).
 
 ### Basic usage
 
-First, construct a FenParser object and feed it a FEN string.
+First, construct a `FenParser` object and feed it a FEN string.
 
 ```csharp
 FenParser parser = new FenParser("5k2/ppp5/4P3/3R3p/6P1/1K2Nr2/PP3P2/8 b - - 1 32");
